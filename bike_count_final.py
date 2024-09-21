@@ -4,11 +4,30 @@ import plotly.express as px
 import folium
 from streamlit_folium import folium_static
 
+@st.cache_data
+def load_data():
+    """
+    Loads data from a Parquet file.
 
-st.header("Paris and its cyclists")
+    Returns:
+        pd.DataFrame: Data from 'train.parquet'.
+    """
+    data = pd.read_parquet('train.parquet')
+
+    return data
 
 @st.cache_data
 def load_zones_map():
+    """
+    Generates a Folium map with markers for unique bike counter locations.
+
+    The map is centered on the mean latitude and longitude of the dataset,
+    with markers for each unique counter location and popups displaying the
+    counter names.
+
+    Returns:
+        folium.Map: Map with bike counter locations.
+    """
     m = folium.Map(location=df[["latitude", "longitude"]].mean(axis=0), zoom_start=13)
 
     for _, row in (
@@ -22,14 +41,16 @@ def load_zones_map():
 
     return m
 
-@st.cache_data
-def load_data():
-    
-    data = pd.read_parquet('train.parquet')
-
-    return data
-
 def plot_avg_bikes_by_weekday(df):
+    """
+    Plots the average number of cyclists by weekday for a selected month.
+
+    Args:
+        df (pd.DataFrame): DataFrame with 'date' and 'bike_count' columns.
+
+    Returns:
+        plotly.graph_objects.Figure: Interactive bar chart of average cyclists by weekday.
+    """
     df['date'] = pd.to_datetime(df['date'])
     df['day_of_week'] = df['date'].dt.day_name()
     df['month'] = df['date'].dt.month
@@ -58,6 +79,9 @@ def plot_avg_bikes_by_weekday(df):
 
     return fig
 
+st.header("Paris and its cyclists")
+
+# Load the data
 df = load_data()
 
 # Introduction
@@ -69,7 +93,6 @@ st.subheader("Map of the sensors - Paris, France")
 st.write("This map displays the location of the sensors that were used to collect the data.")
 map = load_zones_map()
 folium_static(map)
-
 
 # Display the average number of cyclists per day of the week, depending on the month
 st.subheader("Average number of cyclists by weekday")
