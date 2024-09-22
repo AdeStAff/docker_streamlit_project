@@ -74,12 +74,13 @@ def plot_avg_bikes_by_weekday(df):
     avg_bikes = avg_bikes.sort_values('day_of_week')
 
     # Plot the interactive graph
-    fig = px.bar(avg_bikes, x='day_of_week', y='bike_count', title=f"Avg # of cyclists per day of the week - {selected_month}")
+    fig = px.bar(avg_bikes, x='day_of_week', y='bike_count', title=f"Average number of cyclists per day of the week - {selected_month}")
     fig.update_layout(xaxis_title='Day of the Week', yaxis_title='Average number of cyclists')
 
     return fig
 
-st.header("Paris and its cyclists")
+st.title(":bike: Paris and its cyclists :bike:")
+st.image('bikes_in_paris.png')
 
 # Load the data
 df = load_data()
@@ -87,12 +88,14 @@ df = load_data()
 # Introduction
 st.write('Over the course of more than a year, the city of Paris tracked the number of cyclists passing through various locations using sensors strategically placed around the city. Leveraging this dataset, I created a detailed graph that analyzes the average number of cyclists per day of the week, depending on the month.')
 st.write('The data was collected from September 2020 to August 2021, 24/7.')
+st.write(' ') # Added a spacing line for more clarity
 
 # Display the map of sensors
 st.subheader("Map of the sensors - Paris, France")
 st.write("This map displays the location of the sensors that were used to collect the data.")
 map = load_zones_map()
 folium_static(map)
+st.write(' ')
 
 # Display the average number of cyclists per day of the week, depending on the month
 st.subheader("Average number of cyclists by weekday")
