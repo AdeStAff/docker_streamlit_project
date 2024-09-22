@@ -7,3 +7,4 @@ The app was containerized using Docker
 
 ![Alt text](first_part.png)
 ![Alt text](second_part.png)
+![Alt text](third_part.png)
